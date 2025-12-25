@@ -19,7 +19,7 @@ export function Dashboard({ activities, shoes }: { activities: Activity[], shoes
     const years = useMemo(() => {
         if (activities.length === 0) return [new Date().getFullYear()];
         const uniqueYears = new Set(
-            activities.map((a) => getYear(parseISO(a.start_date_local)))
+            activities.map((a) => getYear(parseISO(a.start_date_local.replace("Z", ""))))
         );
         // Add current year just in case
         uniqueYears.add(new Date().getFullYear());
@@ -30,7 +30,7 @@ export function Dashboard({ activities, shoes }: { activities: Activity[], shoes
 
     const filteredActivities = useMemo(() => {
         return activities.filter(
-            (a) => getYear(parseISO(a.start_date_local)) === selectedYear
+            (a) => getYear(parseISO(a.start_date_local.replace("Z", ""))) === selectedYear
         );
     }, [activities, selectedYear]);
 

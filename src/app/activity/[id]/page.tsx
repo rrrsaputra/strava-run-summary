@@ -56,7 +56,7 @@ export default async function ActivityPage({ params }: { params: Promise<{ id: s
                     <div className="flex items-center gap-4 text-gray-500 dark:text-gray-400">
                         <div className="flex items-center gap-1">
                             <Calendar className="w-4 h-4" />
-                            {format(new Date(activity.start_date_local), "EEEE, MMM d, yyyy • h:mm a")}
+                            {format(new Date(activity.start_date_local.replace("Z", "")), "EEEE, MMM d, yyyy • h:mm a")}
                         </div>
                         <div className="px-2 py-0.5 rounded-full bg-gray-100 dark:bg-zinc-800 text-xs font-medium border border-gray-200 dark:border-zinc-700">
                             {activity.type}

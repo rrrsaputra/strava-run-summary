@@ -86,7 +86,7 @@ export function ActivityList({ activities, shoes }: { activities: Activity[], sh
                                         {activity.name}
                                     </h3>
                                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                                        {format(new Date(activity.start_date_local), "MMM d, yyyy • h:mm a")}
+                                        {format(new Date(activity.start_date_local.replace("Z", "")), "MMM d, yyyy • h:mm a")}
                                         {shoeName && (
                                             <span className="ml-2 inline-flex items-center text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 px-1.5 py-0.5 rounded">
                                                 👟 {shoeName}

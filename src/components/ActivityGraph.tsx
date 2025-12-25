@@ -74,7 +74,7 @@ export function ActivityGraph({
     const activityMap = new Map<string, Activity[]>();
     activities.forEach((act) => {
         // Use local start date if available to avoid timezone hydration issues
-        const dateStr = format(new Date(act.start_date_local || act.start_date), "yyyy-MM-dd");
+        const dateStr = format(new Date((act.start_date_local || act.start_date).replace("Z", "")), "yyyy-MM-dd");
         const existing = activityMap.get(dateStr) || [];
         existing.push(act);
         activityMap.set(dateStr, existing);

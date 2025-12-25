@@ -46,7 +46,7 @@ export function PersonalBests({ activities }: { activities: Activity[] }) {
         label: "Longest Run",
         value: formatDistance(longestRun.distance),
         subValue: formatDuration(longestRun.moving_time),
-        date: longestRun.start_date,
+        date: longestRun.start_date_local,
         icon: <Footprints className="w-6 h-6" />,
         colorClass: "from-blue-500 to-indigo-600",
         textColor: "text-blue-50",
@@ -69,7 +69,7 @@ export function PersonalBests({ activities }: { activities: Activity[] }) {
                 label: `Fastest ${milestone.label}`,
                 value: formatDuration(bestRun.moving_time),
                 subValue: `${formatDistance(bestRun.distance)} run`,
-                date: bestRun.start_date,
+                date: bestRun.start_date_local,
                 icon: milestone.icon,
                 colorClass: "from-orange-500 to-amber-600",
                 textColor: "text-orange-50",
@@ -100,7 +100,7 @@ export function PersonalBests({ activities }: { activities: Activity[] }) {
                                 {stat.icon}
                             </div>
                             <span className="text-[10px] font-medium bg-black/20 px-2 py-0.5 rounded-full text-white/90 truncate max-w-[80px]">
-                                {format(new Date(stat.date), "MMM yyyy")}
+                                {format(new Date(stat.date.replace("Z", "")), "MMM yyyy")}
                             </span>
                         </div>
                         <div>
