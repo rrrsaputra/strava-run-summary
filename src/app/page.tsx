@@ -27,6 +27,7 @@ export default async function Home() {
   let activities: Activity[] = [];
   let athlete: any = null;
   let allShoes: Gear[] = [];
+  let fetchError: string | null = null;
 
   try {
     const [activitiesData, athleteData] = await Promise.all([
@@ -60,6 +61,7 @@ export default async function Home() {
 
   } catch (error) {
     console.error("Error fetching data:", error);
+    fetchError = "Failed to synchronize data from Strava. Your session may have expired.";
   }
 
   return (
@@ -84,6 +86,15 @@ export default async function Home() {
           </div>
         )}
       </header>
+
+      {fetchError && (
+        <div className="mb-8 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-center justify-between">
+          <div className="text-red-600 dark:text-red-400 text-sm">
+            <strong>Sync Error:</strong> {fetchError}
+          </div>
+          <LogoutButton />
+        </div>
+      )}
 
       <Dashboard activities={activities} shoes={allShoes} />
     </main>
