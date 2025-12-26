@@ -1,8 +1,9 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { getStravaActivities, getAthleteProfile, Activity } from "@/lib/strava";
-import { Dashboard } from "@/components/Dashboard";
+import { getStravaActivities, getAthleteProfile, getGearById, Activity } from "@/lib/strava";
+import { Dashboard, Gear } from "@/components/Dashboard";
 import { LoginButton } from "@/components/LoginButton";
+import { LogoutButton } from "@/components/LogoutButton";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -25,6 +26,7 @@ export default async function Home() {
   // Fetch data
   let activities: Activity[] = [];
   let athlete: any = null;
+  let allShoes: Gear[] = [];
 
   try {
     const [activitiesData, athleteData] = await Promise.all([
@@ -33,6 +35,29 @@ export default async function Home() {
     ]);
     activities = activitiesData;
     athlete = athleteData;
+
+    // Identify active shoes
+    const activeShoes = athlete?.shoes || [];
+    const activeShoeIds = new Set(activeShoes.map((s: Gear) => s.id));
+
+    // Identify missing (retired) gear from activities
+    const usedGearIds = new Set<string>();
+    activities.forEach(a => {
+      if (a.gear_id) usedGearIds.add(a.gear_id);
+    });
+
+    const missingGearIds = Array.from(usedGearIds).filter(id => !activeShoeIds.has(id));
+
+    // Fetch missing gear details
+    const missingGearPromises = missingGearIds.map(id => getGearById(session.accessToken as string, id));
+    const fetchedGear = await Promise.all(missingGearPromises);
+
+    // Filter out nulls (failed fetches)
+    const retiredShoes = fetchedGear.filter(g => g !== null) as Gear[];
+
+    // Combined list
+    allShoes = [...activeShoes, ...retiredShoes];
+
   } catch (error) {
     console.error("Error fetching data:", error);
   }
@@ -53,11 +78,14 @@ export default async function Home() {
               <p className="text-xs text-gray-500">{activities.length} activities</p>
             </div>
             <img src={athlete.profile} alt="Profile" className="w-10 h-10 rounded-full border border-gray-200" />
+            <div className="ml-2 border-l pl-4 border-gray-200 dark:border-zinc-800">
+              <LogoutButton />
+            </div>
           </div>
         )}
       </header>
 
-      <Dashboard activities={activities} shoes={athlete?.shoes || []} />
+      <Dashboard activities={activities} shoes={allShoes} />
     </main>
   );
 }

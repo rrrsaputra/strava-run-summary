@@ -17,6 +17,7 @@ export async function getStravaActivities(accessToken: string) {
         if (!res.ok) {
             // If one page fails, we might still want to return what we have, but throwing is safer to indicate issue
             console.error(`Failed to fetch activities page ${page}: ${res.statusText}`);
+            console.error(await res.text());
             break;
         }
 
@@ -107,6 +108,22 @@ export async function getActivityById(accessToken: string, id: string) {
 
     if (!res.ok) {
         throw new Error("Failed to fetch activity");
+    }
+
+    return res.json();
+}
+
+export async function getGearById(accessToken: string, id: string) {
+    const res = await fetch(`https://www.strava.com/api/v3/gear/${id}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+        next: { revalidate: 3600 }, // Cache gear details
+    });
+
+    if (!res.ok) {
+        // Return null instead of throwing so we can handle it gracefully
+        return null;
     }
 
     return res.json();
