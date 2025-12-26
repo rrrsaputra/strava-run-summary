@@ -28,7 +28,24 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          <div className="flex flex-col min-h-screen">
+            <div className="flex-grow">
+              {children}
+            </div>
+            <footer className="py-8 text-center text-xs text-gray-400 dark:text-zinc-600">
+              Created by{" "}
+              <a
+                href="https://www.instagram.com/rakadimas_s/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-gray-500 hover:underline dark:text-zinc-500"
+              >
+                Raka Dimas Saputra
+              </a>
+            </footer>
+          </div>
+        </Providers>
       </body>
     </html>
   );

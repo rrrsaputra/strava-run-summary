@@ -20,7 +20,7 @@ export default async function RunScorePage() {
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     return (
-        <main className="min-h-screen p-8 max-w-7xl mx-auto flex flex-col justify-center">
+        <main className="p-8 max-w-7xl mx-auto flex flex-col justify-center">
             <div className="mb-8">
                 <Link href="/" className="inline-flex items-center text-sm text-gray-500 hover:text-purple-600 transition-colors">
                     <ArrowLeft className="w-4 h-4 mr-1" />

@@ -10,7 +10,7 @@ export default async function Home() {
 
   if (!session || !session.accessToken) {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center p-8 text-center bg-gray-50 dark:bg-black">
+      <main className="flex flex-col items-center justify-center p-8 text-center bg-gray-50 dark:bg-black h-full min-h-[calc(100vh-6rem)]">
         <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">
           Strava <span className="text-orange-600">Summary</span>
         </h1>
@@ -65,7 +65,7 @@ export default async function Home() {
   }
 
   return (
-    <main className="min-h-screen p-8 max-w-7xl mx-auto">
+    <main className="p-8 max-w-7xl mx-auto">
       <header className="flex items-center justify-between mb-12">
         <div className="flex items-center gap-4">
           <h1 className="text-2xl font-bold">
