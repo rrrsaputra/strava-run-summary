@@ -30,12 +30,15 @@ export function Dashboard({ activities, shoes }: { activities: Activity[], shoes
     }, [activities]);
 
     const [selectedYear, setSelectedYear] = useState<number>(years[0]);
+    const [selectedGearId, setSelectedGearId] = useState<string | null>(null);
 
     const filteredActivities = useMemo(() => {
-        return activities.filter(
-            (a) => getYear(parseISO(a.start_date_local.replace("Z", ""))) === selectedYear
-        );
-    }, [activities, selectedYear]);
+        return activities.filter((a) => {
+            const matchesYear = getYear(parseISO(a.start_date_local.replace("Z", ""))) === selectedYear;
+            const matchesGear = selectedGearId ? a.gear_id === selectedGearId : true;
+            return matchesYear && matchesGear;
+        });
+    }, [activities, selectedYear, selectedGearId]);
 
     return (
         <div className="space-y-8">
@@ -72,7 +75,12 @@ export function Dashboard({ activities, shoes }: { activities: Activity[], shoes
             </section>
 
             <section>
-                <GearStats activities={activities} shoes={shoes} />
+                <GearStats
+                    activities={activities}
+                    shoes={shoes}
+                    selectedGearId={selectedGearId}
+                    onSelectGear={setSelectedGearId}
+                />
             </section>
 
             <section>
