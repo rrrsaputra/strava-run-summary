@@ -4,6 +4,7 @@ import { getStravaActivities, getAthleteProfile, getGearById, Activity } from "@
 import { Dashboard, Gear } from "@/components/Dashboard";
 import { LoginButton } from "@/components/LoginButton";
 import { LogoutButton } from "@/components/LogoutButton";
+import Link from "next/link";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -67,10 +68,30 @@ export default async function Home() {
   return (
     <main className="p-8 max-w-7xl mx-auto">
       <header className="flex items-center justify-between mb-12">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-6">
           <h1 className="text-2xl font-bold">
             Strava <span className="text-orange-600">Summary</span>
           </h1>
+          <nav className="hidden md:flex items-center gap-6 ml-4 border-l border-gray-200 dark:border-zinc-800 pl-6">
+            <Link
+              href="/score"
+              className="text-sm font-medium text-gray-500 hover:text-purple-600 dark:text-gray-400 dark:hover:text-purple-400 transition-colors flex items-center gap-1.5 hover:underline underline-offset-4"
+            >
+              Run Score
+            </Link>
+            <Link
+              href="/kalender"
+              className="text-sm font-medium text-gray-500 hover:text-orange-600 dark:text-gray-400 dark:hover:text-orange-400 transition-colors flex items-center gap-1.5 hover:underline underline-offset-4"
+            >
+              Kalender
+            </Link>
+            <Link
+              href="/heatmap"
+              className="text-sm font-medium text-gray-500 hover:text-orange-600 dark:text-gray-400 dark:hover:text-orange-400 transition-colors flex items-center gap-1.5 hover:underline underline-offset-4"
+            >
+              Peta Panas
+            </Link>
+          </nav>
         </div>
 
         {athlete && (

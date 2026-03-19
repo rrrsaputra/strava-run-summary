@@ -68,7 +68,7 @@ export function ActivityGraph({
     const weeks = eachWeekOfInterval({
         start: firstDayOfYear,
         end: lastDayOfYear,
-    });
+    }, { weekStartsOn: 1 });
 
     // Map activities to dates
     const activityMap = new Map<string, Activity[]>();
@@ -84,7 +84,7 @@ export function ActivityGraph({
     // Find which week index contains the 1st of each month
     const months: { name: string; weekIndex: number }[] = [];
     weeks.forEach((weekStart, index) => {
-        const weekEnd = endOfWeek(weekStart);
+        const weekEnd = endOfWeek(weekStart, { weekStartsOn: 1 });
         const daysInWeek = eachDayOfInterval({ start: weekStart, end: weekEnd });
         const firstOfMonth = daysInWeek.find(d => d.getDate() === 1 && d.getFullYear() === year);
         if (firstOfMonth) {
@@ -111,12 +111,12 @@ export function ActivityGraph({
                 <div className="flex">
                     {/* Day Labels */}
                     <div className="flex flex-col justify-between text-[10px] text-gray-400 mr-2 py-2 h-[130px] leading-3">
-                        <span></span><span>Mon</span><span></span><span>Wed</span><span></span><span>Fri</span><span></span>
+                        <span>Mon</span><span></span><span>Wed</span><span></span><span>Fri</span><span></span><span>Sun</span>
                     </div>
 
                     {/* Grid */}
                     <div className="grid grid-rows-7 grid-flow-col gap-1" style={{ height: 'max-content' }}>
-                        {Array.from({ length: startDayOfWeek }).map((_, i) => (
+                        {Array.from({ length: (startDayOfWeek + 6) % 7 }).map((_, i) => (
                             <div key={`pad-${i}`} className="w-4 h-4" />
                         ))}
 
