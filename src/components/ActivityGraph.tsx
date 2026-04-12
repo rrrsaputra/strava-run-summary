@@ -16,36 +16,36 @@ function cn(...inputs: (string | undefined | null | false)[]) {
     return twMerge(clsx(inputs));
 }
 
-// Hex codes for gradients
+// Hex codes for gradients (Highly Contrasting)
 const ACTIVITY_COLORS: Record<string, string> = {
     Run: "#f97316", // orange-500
-    Ride: "#ef4444", // red-500
-    Swim: "#3b82f6", // blue-500
-    WeightTraining: "#a855f7", // purple-500
-    Workout: "#a855f7", // purple-500
-    Walk: "#22c55e", // green-500
-    Default: "#22c55e", // green-500
+    WeightTraining: "#14b8a6", // teal-500 (cool green)
+    Workout: "#dc2626", // red-600 (deep red, far from orange)
+    StairStepper: "#3b82f6", // blue-500
+    Walk: "#facc15", // yellow-400 (bright yellow, stands out)
+    Other: "#ec4899", // pink-500
+    Default: "#ec4899", // pink-500
 };
 
 const getActivityColorClass = (type: string) => {
     switch (type) {
         case "Run": return "bg-orange-500";
-        case "Ride": return "bg-red-500";
-        case "Swim": return "bg-blue-500";
-        case "WeightTraining":
-        case "Workout": return "bg-purple-500";
-        default: return "bg-green-500";
+        case "WeightTraining": return "bg-teal-500";
+        case "Workout": return "bg-red-600";
+        case "StairStepper": return "bg-blue-500";
+        case "Walk": return "bg-yellow-400";
+        default: return "bg-pink-500";
     }
 };
 
 const getIcon = (type: string) => {
     switch (type) {
         case "Run": return <Footprints className="h-3 w-3 text-orange-500" />;
-        case "Ride": return <Bike className="h-3 w-3 text-red-500" />;
-        case "Swim": return <Waves className="h-3 w-3 text-blue-500" />;
-        case "WeightTraining":
-        case "Workout": return <Dumbbell className="h-3 w-3 text-purple-500" />;
-        default: return <ActivityIcon className="h-3 w-3 text-gray-500" />;
+        case "WeightTraining": return <Dumbbell className="h-3 w-3 text-teal-500" />;
+        case "Workout": return <ActivityIcon className="h-3 w-3 text-red-600" />;
+        case "StairStepper": return <ActivityIcon className="h-3 w-3 text-blue-500" />;
+        case "Walk": return <Footprints className="h-3 w-3 text-yellow-500" />; // yellow-500 for better icon visibility
+        default: return <ActivityIcon className="h-3 w-3 text-pink-500" />;
     }
 }
 

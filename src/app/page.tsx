@@ -91,6 +91,12 @@ export default async function Home() {
             >
               Peta Panas
             </Link>
+            <Link
+              href="/races"
+              className="text-sm font-medium text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 transition-colors flex items-center gap-1.5 hover:underline underline-offset-4"
+            >
+              Races
+            </Link>
           </nav>
         </div>
 

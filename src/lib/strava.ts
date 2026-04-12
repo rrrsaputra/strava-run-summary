@@ -81,6 +81,7 @@ export type Activity = {
         average_heartrate?: number;
     }[];
     gear_id: string;
+    workout_type?: number;
 };
 
 export async function getAthleteProfile(accessToken: string) {

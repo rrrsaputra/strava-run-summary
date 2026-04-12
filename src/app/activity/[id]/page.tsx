@@ -37,8 +37,20 @@ export default async function ActivityPage({ params }: { params: Promise<{ id: s
     try {
         activity = await getActivityById(session.accessToken as string, id);
     } catch (error) {
-        return <div className="p-8 text-center text-red-500">Failed to load activity.</div>;
+        console.error("Failed to load activity:", error);
+        return <div className="p-8 text-center text-red-500">Failed to load activity from Strava. It might be private or deleted.</div>;
     }
+
+    if (!activity) {
+        return <div className="p-8 text-center text-red-500">Activity not found.</div>;
+    }
+
+    // Safety fallback for missing properties
+    const statsDate = activity.start_date_local || activity.start_date || new Date().toISOString();
+    const elevation = activity.total_elevation_gain != null ? activity.total_elevation_gain : 0;
+    const avgSpeed = activity.average_speed || 0;
+    const mTime = activity.moving_time || 0;
+    const dist = activity.distance || 0;
 
     return (
         <main className="min-h-screen p-8 max-w-7xl mx-auto">
@@ -51,25 +63,25 @@ export default async function ActivityPage({ params }: { params: Promise<{ id: s
                 {/* Header */}
                 <div>
                     <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-2">
-                        {activity.name}
+                        {activity.name || "Unknown Activity"}
                     </h1>
                     <div className="flex items-center gap-4 text-gray-500 dark:text-gray-400">
                         <div className="flex items-center gap-1">
                             <Calendar className="w-4 h-4" />
-                            {format(new Date(activity.start_date_local.replace("Z", "")), "EEEE, MMM d, yyyy • h:mm a")}
+                            {format(new Date(statsDate.replace("Z", "")), "EEEE, MMM d, yyyy • h:mm a")}
                         </div>
                         <div className="px-2 py-0.5 rounded-full bg-gray-100 dark:bg-zinc-800 text-xs font-medium border border-gray-200 dark:border-zinc-700">
-                            {activity.type}
+                            {activity.type || "Activity"}
                         </div>
                     </div>
                 </div>
 
                 {/* Main Stats Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <StatCard label="Distance" value={formatDistance(activity.distance)} icon={<MapPin className="w-5 h-5 text-blue-500" />} />
-                    <StatCard label="Moving Time" value={formatDuration(activity.moving_time)} icon={<Clock className="w-5 h-5 text-orange-500" />} />
-                    <StatCard label="Avg Pace" value={formatPace(activity.average_speed)} icon={<Zap className="w-5 h-5 text-purple-500" />} />
-                    <StatCard label="Elevation" value={`${Math.round(activity.total_elevation_gain)} m`} icon={<Mountain className="w-5 h-5 text-gray-500" />} />
+                    <StatCard label="Distance" value={formatDistance(dist)} icon={<MapPin className="w-5 h-5 text-blue-500" />} />
+                    <StatCard label="Moving Time" value={formatDuration(mTime)} icon={<Clock className="w-5 h-5 text-orange-500" />} />
+                    <StatCard label="Avg Pace" value={formatPace(avgSpeed)} icon={<Zap className="w-5 h-5 text-purple-500" />} />
+                    <StatCard label="Elevation" value={`${Math.round(elevation)} m`} icon={<Mountain className="w-5 h-5 text-gray-500" />} />
                 </div>
 
                 {/* Splits / Laps (if available) - Strava Detail usually has splits_metric */}
