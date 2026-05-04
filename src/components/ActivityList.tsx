@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Activity } from "@/lib/strava";
 import { format } from "date-fns";
-import { Bike, Footprints, Waves, Dumbbell, Activity as ActivityIcon, ChevronLeft, ChevronRight } from "lucide-react";
+import { Bike, Footprints, Waves, Dumbbell, Activity as ActivityIcon, ChevronLeft, ChevronRight, History } from "lucide-react";
 import Link from "next/link";
 
 const getIcon = (type: string) => {
@@ -59,15 +59,20 @@ export function ActivityList({ activities, shoes }: { activities: Activity[], sh
     };
 
     return (
-        <div className="space-y-4">
-            <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold">Recent Activities</h2>
-                <span className="text-sm text-gray-500">
-                    Showing {startIndex + 1}-{Math.min(startIndex + ITEMS_PER_PAGE, activities.length)} of {activities.length}
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-gray-100 dark:border-zinc-800 p-6">
+            <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-2">
+                    <div className="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg text-orange-600 dark:text-orange-400">
+                        <History className="w-5 h-5" />
+                    </div>
+                    <h2 className="text-xl font-semibold">Recent Activities</h2>
+                </div>
+                <span className="text-sm text-gray-500 font-medium">
+                    {startIndex + 1}-{Math.min(startIndex + ITEMS_PER_PAGE, activities.length)} of {activities.length}
                 </span>
             </div>
 
-            <div className="bg-white dark:bg-zinc-900 rounded-lg shadow divide-y dark:divide-zinc-800">
+            <div className="bg-gray-50/50 dark:bg-zinc-800/30 rounded-xl border border-gray-100 dark:border-zinc-800 divide-y divide-gray-100 dark:divide-zinc-800 overflow-hidden">
                 {paginatedActivities.map((activity) => {
                     const shoeName = activity.gear_id ? shoeMap.get(activity.gear_id) : null;
 
@@ -75,7 +80,7 @@ export function ActivityList({ activities, shoes }: { activities: Activity[], sh
                         <Link
                             href={`/activity/${activity.id}`}
                             key={activity.id}
-                            className="block p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors"
+                            className="block p-4 flex items-center justify-between hover:bg-white dark:hover:bg-zinc-800 transition-colors"
                         >
                             <div className="flex items-center space-x-4">
                                 <div className="p-2 bg-gray-100 dark:bg-zinc-800 rounded-full">

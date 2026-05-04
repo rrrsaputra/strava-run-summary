@@ -80,12 +80,14 @@ export function PersonalBests({ activities }: { activities: Activity[] }) {
     if (stats.length === 0) return null;
 
     return (
-        <div className="mb-8">
-            <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold flex items-center gap-2">
-                    <Crown className="w-5 h-5 text-yellow-500" />
-                    Running Personal Bests
-                </h2>
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-gray-100 dark:border-zinc-800 p-6">
+            <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-2">
+                    <div className="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg text-orange-600 dark:text-orange-400">
+                        <Crown className="w-5 h-5" />
+                    </div>
+                    <h2 className="text-xl font-semibold">Running Personal Bests</h2>
+                </div>
             </div>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

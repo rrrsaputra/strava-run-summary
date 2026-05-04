@@ -97,7 +97,16 @@ export function ActivityGraph({
     }
 
     return (
-        <div className="w-full overflow-x-auto pb-32 pt-4 -mb-24 overflow-visible flex justify-center">
+        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-gray-100 dark:border-zinc-800 p-6">
+            <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-2">
+                    <div className="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg text-orange-600 dark:text-orange-400">
+                        <ActivityIcon className="w-5 h-5" />
+                    </div>
+                    <h2 className="text-xl font-semibold">Activity Graph</h2>
+                </div>
+            </div>
+            <div className="w-full overflow-x-auto pb-32 pt-4 -mb-24 overflow-visible flex justify-center">
             <div className="min-w-max">
                 {/* Month Labels */}
                 <div className="flex text-xs text-gray-400 mb-2 ml-8 relative h-4">
@@ -198,6 +207,7 @@ export function ActivityGraph({
                     ))}
                 </div>
             </div>
+        </div>
         </div>
     );
 }

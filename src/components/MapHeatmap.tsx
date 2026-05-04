@@ -35,6 +35,40 @@ function decodePolyline(encoded: string) {
     return coordinates;
 }
 
+// Bounding box estimasi Mainland Jakarta
+const JKT_NORTH = -6.08;
+const JKT_SOUTH = -6.37;
+const JKT_WEST = 106.68;
+const JKT_EAST = 106.97;
+const GRID_SIZE = 150; // Grid lebih rapat untuk akurasi lebih baik
+
+function calculateJakartaExploration(polylines: { positions: [number, number][] }[]) {
+    const visitedCells = new Set<string>();
+    
+    polylines.forEach(route => {
+        route.positions.forEach(pos => {
+            const lat = pos[0];
+            const lng = pos[1];
+            
+            if (lat <= JKT_NORTH && lat >= JKT_SOUTH && lng >= JKT_WEST && lng <= JKT_EAST) {
+                const latIdx = Math.floor(((lat - JKT_SOUTH) / (JKT_NORTH - JKT_SOUTH)) * GRID_SIZE);
+                const lngIdx = Math.floor(((lng - JKT_WEST) / (JKT_EAST - JKT_WEST)) * GRID_SIZE);
+                
+                visitedCells.add(`${latIdx}-${lngIdx}`);
+            }
+        });
+    });
+    
+    const totalCells = GRID_SIZE * GRID_SIZE;
+    const percentage = (visitedCells.size / totalCells) * 100;
+    
+    return {
+        visited: visitedCells.size,
+        total: totalCells,
+        percentage: percentage.toFixed(2)
+    };
+}
+
 export default function MapHeatmap({ activities }: { activities: Activity[] }) {
     // Siapkan semua polyline jalanan yang pernah dilewati
     const polylines = activities
@@ -54,9 +88,11 @@ export default function MapHeatmap({ activities }: { activities: Activity[] }) {
     // Pusat peta: Ambil rute paling terbaru sebagai pusat
     const center = polylines[0].positions[Math.floor(polylines[0].positions.length / 2)] || [ -6.2088, 106.8456 ]; // Default Jakarta
 
+    const explorationStat = calculateJakartaExploration(polylines);
+
     return (
         <div className="w-full h-[650px] rounded-xl overflow-hidden border border-gray-200 dark:border-zinc-800 shadow-sm relative z-0">
-            <MapContainer center={center} zoom={13} scrollWheelZoom={true} className="w-full h-full bg-[#0a0a0a]">
+            <MapContainer center={center as [number, number]} zoom={13} scrollWheelZoom={true} className="w-full h-full bg-[#0a0a0a] z-0">
                 <TileLayer
                     url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
@@ -77,6 +113,15 @@ export default function MapHeatmap({ activities }: { activities: Activity[] }) {
                     </Polyline>
                 ))}
             </MapContainer>
+
+            {/* Panel Floating untuk Statistik Eksplorasi Jakarta */}
+            <div className="absolute top-4 right-4 z-[1000] bg-white/90 dark:bg-black/80 backdrop-blur-md p-4 rounded-xl border border-gray-200 dark:border-zinc-700 shadow-lg pointer-events-none">
+                <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider mb-1">Eksplorasi Jakarta</p>
+                <div className="flex items-baseline gap-1">
+                    <span className="text-3xl font-bold text-orange-600">{explorationStat.percentage}%</span>
+                </div>
+                <p className="text-[10px] text-gray-400 dark:text-zinc-500 mt-1">Area terjelajahi berdasarkan estimasi grid</p>
+            </div>
         </div>
     );
 }
